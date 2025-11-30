@@ -37,7 +37,7 @@ export const AddProductModal: React.FC = () => {
     description: "",
     specification: "",
     rating: "",
-    image: "/diverse-products-still-life.png",
+    image: "",
   })
   const [errors, setErrors] = useState<Partial<FormData>>({})
 
@@ -58,6 +58,7 @@ export const AddProductModal: React.FC = () => {
     if (!formData.specification.trim()) newErrors.specification = "Specification is required"
     if (!formData.rating || Number.parseFloat(formData.rating) < 0 || Number.parseFloat(formData.rating) > 5)
       newErrors.rating = "Rating must be between 0 and 5"
+    if (!formData.image.trim()) newErrors.image = "Product image URL is required"
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -88,7 +89,7 @@ export const AddProductModal: React.FC = () => {
       description: "",
       specification: "",
       rating: "",
-      image: "/diverse-products-still-life.png",
+      image: "",
     })
     setOpen(false)
   }
@@ -131,6 +132,31 @@ export const AddProductModal: React.FC = () => {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Product Image URL *</label>
+            <input
+              type="url"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg"
+              className="w-full px-3 py-2 border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary mt-1"
+            />
+            {errors.image && <p className="text-destructive text-sm mt-1">{errors.image}</p>}
+            {formData.image && (
+              <div className="mt-2 w-full h-32 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                <img
+                  src={formData.image || "/placeholder.svg"}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/placeholder.svg"
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
